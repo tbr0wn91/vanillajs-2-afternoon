@@ -58,7 +58,71 @@
 </body>
 
 <script>
+    console.log("JS")
+    let mousePosition = {
+        x: 0,
+        y: 0,
+    };
 
+    // We'll use this variable to keep track of when the dots should be on or off the screen.
+    let drawId;
+
+    // This function will take in a min and a max number, and return a random number between those two.
+
+    function getRandomNumber(min, max) {
+        return Math.round(Math.random() * (max - min + 1)) + min;
+      };
+
+//       We need to make a new event listener for any time the mouse moves. To do this we are going to use `addEventListener` on the window object.
+// - using `window.addEventListener` we are going to invoke it and pass in a string, stating what event we are waiting for, `mousemove`.
+// // - We will also pass in a function being the task to be performed when the mouse moves.
+
+    window.addEventListener("mousemove", function(mouseMoveEvent){
+        
+        mousePosition.x = mouseMoveEvent.pageX;
+        mousePosition.y = mouseMoveEvent.pageY;
+        
+    });
+
+    function draw(){
+        console.log("huh")
+        return setInterval(function() {
+            const container = document.getElementById("wrap");
+            const color = `background:rgb(${getRandomNumber(
+            0,
+            255
+          )},${getRandomNumber(0, 255)}, ${getRandomNumber(0, 255)});`;
+          const ballSize = getRandomNumber(10, 30);
+          const size = `height:${ballSize}px; width:${ballSize}px;`;
+          const left = `left:${getRandomNumber(
+            mousePosition.x - ballSize,
+            mousePosition.x
+          )}px;`;
+          const top = `top:${getRandomNumber(
+            mousePosition.y - ballSize,
+            mousePosition.y
+          )}px; `;
+          const style = `${left}${top}${color}${size}`;
+
+          const ball = document.createElement('div');
+    ball.classList.add('ball');
+    ball.style = style;
+
+    ball.addEventListener('animationend', function(e) {
+      e.target.remove();
+    });
+
+    container.appendChild(ball);
+        }, )
+    };
+
+    window.addEventListener("mouseover", function(){
+        drawId = draw();
+    })
+
+    window.addEventListener("mouseout", function(){
+        clearInterval(drawId);
+    });
 </script>
 
 </html>
